@@ -136,19 +136,25 @@
           <button class="navbar-profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
             aria-expanded="false" id="profile-dropdown">
             <img src="{{ asset('assetsAdmin/images/avatar.png') }}" alt="Profile Image" class="navbar-profile-img">
-            <span class="navbar-profile-name d-none d-md-inline">Administrator</span>
+            <span class="navbar-profile-name d-none d-md-inline">{{ Auth::user()->name }}</span>
             <i class="bi bi-chevron-down navbar-profile-caret"></i>
           </button>
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-profile" aria-labelledby="profile-dropdown">
-            <li class="dropdown-header">Welcome !</li>
-            <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> My Account</a></li>
-            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
-            <li><a class="dropdown-item" href="#"><i class="bi bi-lock"></i> Lock Screen</a></li>
+            <li class="dropdown-header">Halo, {{ Auth::user()->name }}</li>
+            <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="bi bi-person"></i> Profil Saya</a></li>
+            <li><a class="dropdown-item" href="{{ route('user.beranda') }}"><i class="bi bi-house"></i> Lihat Website</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item text-danger" href="page-login.html"><i class="bi bi-box-arrow-right"></i>
-                Logout</a></li>
+            <li>
+              <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                  onclick="event.preventDefault(); this.closest('form').submit();">
+                  <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
+              </form>
+            </li>
           </ul>
         </div>
       </div>

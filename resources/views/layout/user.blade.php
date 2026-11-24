@@ -62,14 +62,50 @@
 					</div><!--- END Col -->
 					
 					<div class="col-20 d-none d-xl-block text-end align-self-center">
-						<a href="#" class="header-btn">Sign In</a>
-						<a href="#" class="btn_one">Sign Up</a>
+						{{-- Tampil hanya untuk tamu (belum login) --}}
+						@guest
+							<a href="{{ route('login') }}" class="header-btn">Sign In</a>
+							<a href="{{ route('register') }}" class="btn_one">Sign Up</a>
+						@endguest
+						
+						{{-- Tampil hanya untuk yang sudah login --}}
+						@auth
+							@if (Auth::user()->isAdmin())
+							<a href="{{ route('admin.dashboard') }}" class="header-btn">Admin</a>
+							@else
+							<span class="header-btn">Halo, {{ Str::before(Auth::user()->name, ' ') }}</span>
+							@endif
+						
+							<form action="{{ route('logout') }}" method="POST" class="d-inline">
+							@csrf
+							<a href="{{ route('logout') }}" class="btn_one" style="padding: 12px 20px;"
+								onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+							</form>
+						@endauth
 					</div><!--- END Col -->
+
 					
-					<ul class="mobile_menu">						
+					<ul class="mobile_menu">
 						<li><a href="{{ route('user.beranda') }}">Home</a></li>
 						<li><a href="{{ route('user.katalog-buku') }}">Katalog Buku</a></li>
-					</ul>			
+						@guest
+							<li><a href="{{ route('login') }}">Sign In</a></li>
+							<li><a href="{{ route('register') }}">Sign Up</a></li>
+						@endguest
+						@auth
+							@if (Auth::user()->isAdmin())
+							<li><a href="{{ route('admin.dashboard') }}">Admin</a></li>
+							@endif
+							<li>
+							<form action="{{ route('logout') }}" method="POST">
+								@csrf
+								<a href="{{ route('logout') }}"
+								onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+							</form>
+							</li>
+						@endauth
+					</ul>
+			
 				</div><!--- END ROW -->
 			</div><!--- END CONTAINER -->
 		</div> 	  
@@ -103,7 +139,11 @@
 							<ul>
 								<li><a href="{{ route('user.beranda') }}">Home</a></li>
 								<li><a href="{{ route('user.katalog-buku') }}">Katalog Buku</a></li>
-								<li><a href="{{ route('admin.dashboard') }}">Admin</a></li>
+								@auth
+									@if (Auth::user()->isAdmin())
+										<li><a href="{{ route('admin.dashboard') }}">Admin</a></li>
+									@endif
+								@endauth
 							</ul>
 						</div>
 					</div><!--- END COL -->	
